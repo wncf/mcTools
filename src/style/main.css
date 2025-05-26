@@ -1,0 +1,8 @@
+@import "tailwindcss";
+#app{
+    height: 100vh;
+}
+
+svg{
+    vertical-align: baseline !important;
+}
