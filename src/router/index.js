@@ -16,15 +16,7 @@ const router = createRouter({
             title: "首页",
           },
           component: () => import("@/views/home/index.vue"),
-        },
-        {
-          path: "/magnet",
-          name: "magnet",
-          meta: {
-            title: "地图",
-          },
-          component: () => import("@/views/magnet/index.vue"),
-        },
+        }, 
       ],
     },
   ],

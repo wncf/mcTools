@@ -9,10 +9,6 @@
       <pie-chart-outlined />
       <span>首页</span>
     </a-menu-item>
-    <a-menu-item key="magnet">
-      <pie-chart-outlined />
-      <span>地图</span>
-    </a-menu-item>
   </a-menu>
 </template>
 <script>
