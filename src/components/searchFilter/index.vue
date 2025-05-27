@@ -1,7 +1,8 @@
 <template>
-  <div class="py-2 px-2 bg-white flex gap-6">
+  <div class="py-2 bg-white flex gap-6">
     <div class="flex gap-2">
       <a-input-search
+        v-if="!hideFilterItems.includes('searchFilter')"
         :value="queryList.searchFilter"
         placeholder="请输入关键词..."
         style="width: 320px"
@@ -11,6 +12,8 @@
       >
       </a-input-search>
       <a-select
+        show-search
+        optionFilterProp="label"
         allowClear
         :value="queryList.modLoaderType"
         style="width: 120px"
@@ -19,6 +22,8 @@
         @change="onValueChange($event, 'modLoaderType')"
       ></a-select>
       <a-select
+        show-search
+        optionFilterProp="label"
         allowClear
         :value="queryList.gameVersion"
         style="width: 120px"
@@ -27,6 +32,9 @@
         @change="onValueChange($event, 'gameVersion')"
       ></a-select>
       <a-cascader
+        v-if="!hideFilterItems.includes('categoryId')"
+        show-search
+        optionFilterProp="label"
         allowClear
         :value="queryList.categoryId"
         :options="options.classOptions"
@@ -52,6 +60,10 @@ import { modLoaderOptions } from "@/config/enumOptions";
 export default {
   name: "searchFilter",
   props: {
+    hideFilterItems: {
+      type: Array,
+      default: () => [],
+    },
     queryList: {
       type: Object,
       default: () => ({}),

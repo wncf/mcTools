@@ -7,6 +7,12 @@ export const modList = (params) => {
 export const getMcClass = (params) => {
   return request.get(`/categories?gameId=${gameId}&classId=${6}`, params);
 };
+
+// 获取游戏mod文件
+export const getMcModFiles = ({ modeId, ...args }) => {
+  return request.get(`/mods/${modeId}/files`, args);
+};
+
 // 获取游戏版本
 export const getMcVersion = (params) => {
   return request.get(`/minecraft/version`, params);

@@ -1,13 +1,12 @@
 import baseConfig from "@/config/base.config";
-import { createRouter, createMemoryHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-  history: createMemoryHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: "/",
       component: () => import("@/layout/defaultLayout.vue"),
-      redirect: "/home",
       children: [
         {
           path: "/home",
@@ -28,6 +27,13 @@ const router = createRouter({
       ],
     },
   ],
+});
+router.beforeEach((to, from, next) => {
+  if (to.path === "/") {
+    next({ path: "/home" });
+  } else {
+    next();
+  }
 });
 router.afterEach((to) => {
   const name = to.meta.title;

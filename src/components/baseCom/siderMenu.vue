@@ -6,11 +6,11 @@
     @select="onSelect"
   >
     <a-menu-item key="home">
-      <pie-chart-outlined />
+      <DownloadOutlined />
       <span>下载</span>
     </a-menu-item>
     <a-menu-item key="ping">
-      <pie-chart-outlined />
+      <LineChartOutlined />
       <span>测试ip</span>
     </a-menu-item>
   </a-menu>
@@ -39,7 +39,6 @@ export default {
   mounted() {},
   methods: {
     onSelect({ key }) {
-      console.log(key, "key");
       this.$router.push({
         name: key,
       });

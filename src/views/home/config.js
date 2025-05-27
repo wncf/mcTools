@@ -7,7 +7,7 @@ export const initQueryList = () => {
     classId: 6, //传6就对了 6是模组
     categoryId: 0, //类型，如魔法，api
     index: 0, //从index开始计算
-    pageSize: 40,
+    pageSize: 20,
     sortField: 2,
     sortOrder: "desc",
   };

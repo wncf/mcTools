@@ -6,7 +6,6 @@
     <div class="absolute top-16 bottom-16 left-0 right-0">
       <vxe-grid
         size="mini"
-        border
         height="100%"
         :column-config="{ resizable: true }"
         :data="tableData"
@@ -89,8 +88,7 @@ export default {
   computed: {
     currentPage() {
       const page = this.queryList.index / this.queryList.pageSize;
-      if (!page) return 1;
-      return page;
+      return page + 1;
     },
   },
   watch: {},
@@ -115,7 +113,8 @@ export default {
       }
       modList(params)
         .then((res) => {
-          this.total = res.pagination.totalCount;
+          const total = res.pagination.totalCount;
+          this.total = total > 10000 ? 10000 : total;
           this.tableData = formatterData(res.data);
         })
         .finally(() => {
@@ -126,7 +125,7 @@ export default {
       if (page === 1) {
         this.queryList.index = 0;
       } else {
-        this.queryList.index = pageSize * page;
+        this.queryList.index = (page - 1) * pageSize;
       }
       this.queryList.pageSize = pageSize;
       this.fetchList();
