@@ -1,6 +1,7 @@
 import { compareTime } from "@/utils/date";
 import { modLoaderType } from "@/config/enumOptions";
 import { find, map } from "xe-utils";
+import modTypes from "@/locale/modTypes";
 export const initQueryList = () => {
   return {
     classId: 6, //传6就对了 6是模组
@@ -23,6 +24,12 @@ export const columns = [
     field: "version",
     minWidth: "120",
     slots: { default: "version" },
+  },
+  {
+    title: "模组类型",
+    field: "type",
+    minWidth: "120",
+    slots: { default: "types" },
   },
   {
     title: "最后更新时间",
@@ -48,11 +55,20 @@ export const columns = [
 ];
 export function formatterData(data) {
   return map(data, (row) => {
-    const versionList = row.latestFilesIndexes || [];
+    const versionList =
+      row.latestFilesIndexes.filter((item, index) => index < 2) || [];
     const tags = [];
+    const categories = row.categories
+      .map((item) => {
+        return modTypes[item.id];
+      })
+      .filter((i) => Boolean(i));
     for (let key in modLoaderType) {
       const value = modLoaderType[key];
-      const target = find(versionList, (item) => item.modLoader === Number(key));
+      const target = find(
+        versionList,
+        (item) => item.modLoader === Number(key)
+      );
       if (target) {
         tags.push({
           name: value,
@@ -64,6 +80,7 @@ export function formatterData(data) {
     return {
       ...row,
       tagInfo: tags,
+      categories: categories,
     };
   });
 }

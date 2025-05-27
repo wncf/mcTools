@@ -7,7 +7,11 @@
   >
     <a-menu-item key="home">
       <pie-chart-outlined />
-      <span>首页</span>
+      <span>下载</span>
+    </a-menu-item>
+    <a-menu-item key="ping">
+      <pie-chart-outlined />
+      <span>测试ip</span>
     </a-menu-item>
   </a-menu>
 </template>

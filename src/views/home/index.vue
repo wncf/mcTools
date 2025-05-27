@@ -5,7 +5,10 @@
     </div>
     <div class="absolute top-16 bottom-16 left-0 right-0">
       <vxe-grid
+        size="mini"
+        border
         height="100%"
+        :column-config="{ resizable: true }"
         :data="tableData"
         :columns="columns"
         :loading="loading"
@@ -21,9 +24,14 @@
           </div>
         </template>
         <template #version="{ row }">
-          <div class="flex flex-wrap gap-2">
-            <a-tag v-for="item of row.tagInfo" :key="item.name">{{
-              `${item.name}(${item.value})`
+          <a-tag v-for="item of row.tagInfo" :key="item.name">{{
+            `${item.name}(${item.value})`
+          }}</a-tag>
+        </template>
+        <template #types="{ row }">
+          <div class="flex flex-wrap gap-y-2">
+            <a-tag v-for="name of row.categories" :key="name">{{
+              `${name} `
             }}</a-tag>
           </div>
         </template>
@@ -109,7 +117,6 @@ export default {
         .then((res) => {
           this.total = res.pagination.totalCount;
           this.tableData = formatterData(res.data);
-          console.log(this.tableData, "this.tableData");
         })
         .finally(() => {
           this.loading = false;

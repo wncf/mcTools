@@ -16,7 +16,15 @@ const router = createRouter({
             title: "首页",
           },
           component: () => import("@/views/home/index.vue"),
-        }, 
+        },
+        {
+          path: "/ping",
+          name: "ping",
+          meta: {
+            title: "服务器状态",
+          },
+          component: () => import("@/views/ping/index.vue"),
+        },
       ],
     },
   ],

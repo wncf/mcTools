@@ -25,6 +25,7 @@ declare module 'vue' {
     APopover: typeof import('ant-design-vue/es')['Popover']
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
+    ATable: typeof import('ant-design-vue/es')['Table']
     ATag: typeof import('ant-design-vue/es')['Tag']
     DesktopOutlined: typeof import('@ant-design/icons-vue')['DesktopOutlined']
     FileOutlined: typeof import('@ant-design/icons-vue')['FileOutlined']

@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider :locale="locale">
+  <a-config-provider v-bind="globalConfig">
     <router-view></router-view>
   </a-config-provider>
 </template>
@@ -16,11 +16,24 @@ export default {
     };
   },
   data() {
-    return {
-      locale: zhCN,
-    };
+    return {};
   },
-  computed: {},
+  computed: {
+    globalConfig() {
+      return {
+        locale: zhCN,
+        theme: {
+          token: {
+            colorPrimary: "#2F54EB",
+            fontSize: 13,
+            borderRadius: 4,
+            wireframe: false,
+          },
+          algorithm: [],
+        },
+      };
+    },
+  },
   methods: {
     ...mapActions(useAppBaseStore, ["fetchOptioons"]),
   },
