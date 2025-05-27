@@ -29,9 +29,11 @@
         </template>
         <template #types="{ row }">
           <div class="flex flex-wrap gap-y-2">
-            <a-tag v-for="name of row.categories" :key="name">{{
-              `${name} `
-            }}</a-tag>
+            <a-tag
+              v-for="(name, index) of row.categories"
+              :key="`${row._X_ROW_KEY}-${name}-${index}`"
+              >{{ `${name} ` }}</a-tag
+            >
           </div>
         </template>
         <template #authors="{ row }">
@@ -46,7 +48,9 @@
           </div>
         </template>
         <template #opt="{ row }">
-          <a-button @click="onShowDownload(row)">下载</a-button>
+          <a-button :disabled="!row.isAvailable" @click="onShowDownload(row)"
+            >下载</a-button
+          >
         </template>
       </vxe-grid>
     </div>
@@ -54,6 +58,7 @@
       class="py-2 pr-2 absolute bottom-0 left-0 right-0 bg-white flex justify-end"
     >
       <a-pagination
+        :pageSizeOptions="['10', '20', '40', '50']"
         :current="currentPage"
         :page-size="queryList.pageSize"
         :total="total"

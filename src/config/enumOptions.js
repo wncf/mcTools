@@ -1,18 +1,22 @@
 export const modLoaderOptions = [
   {
     label: "Forge",
+    title: "Forge",
     value: 1,
   },
   {
     label: "Fabric",
+    title: "Fabric",
     value: 4,
   },
   {
     label: "NeoForge",
+    title: "NeoForge",
     value: 6,
   },
   {
     label: "Quilt",
+    title: "Quilt",
     value: 5,
   },
 ];

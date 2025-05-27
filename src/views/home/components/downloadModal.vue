@@ -3,7 +3,7 @@
     :width="800"
     :maskClosable="false"
     v-model:open="open"
-    title="下载"
+    :title="modalTitle"
     :footer="null"
     @ok="handleOk"
     @cancel="onCancel"
@@ -26,6 +26,44 @@
           :data="tableData"
           :column-config="{ resizable: true }"
         >
+          <template #version="{ row }">
+            <template v-if="row.mcVersions.length > 1">
+              <a-popover title="">
+                <template #content>
+                  <a-tag
+                    v-for="label of row.mcVersions"
+                    :key="`${row._X_ROW_KEY}_${label}`"
+                    >{{ label }}</a-tag
+                  >
+                </template>
+                <span>
+                  <a-tag>{{ `${row.mcVersions[0]}++` }}</a-tag>
+                </span>
+              </a-popover>
+            </template>
+            <template v-else>
+              <a-tag>{{ row.mcVersions[0] }}</a-tag>
+            </template>
+          </template>
+          <template #modLoader="{ row }">
+            <template v-if="row.mcLoadTypes.length > 1">
+              <a-popover title="">
+                <template #content>
+                  <a-tag
+                    v-for="label of row.mcLoadTypes"
+                    :key="`${row._X_ROW_KEY}_${label}`"
+                    >{{ label }}</a-tag
+                  >
+                </template>
+                <span>
+                  <a-tag>{{ `${row.mcLoadTypes[0]}..` }}</a-tag>
+                </span>
+              </a-popover>
+            </template>
+            <template v-else>
+              <a-tag>{{ row.mcLoadTypes[0] }}</a-tag>
+            </template>
+          </template>
           <template #opt="{ row }">
             <div>
               <a-button type="link" :href="row.downloadUrl">下载</a-button>
@@ -37,6 +75,7 @@
         class="py-2 pr-2 absolute bottom-0 left-0 right-0 bg-white flex justify-end"
       >
         <a-pagination
+          :pageSizeOptions="['10', '20', '40', '50']"
           :current="currentPage"
           :page-size="queryList.pageSize"
           :total="pageTotal"
@@ -52,6 +91,9 @@ import { getMcModFiles } from "@/api/mc";
 import SearchFilter from "@/components/searchFilter/index.vue";
 import { compareTime } from "@/utils/date";
 import { bytesToMB } from "@/utils/index";
+import { mapState } from "pinia";
+import { useAppBaseStore } from "@/store";
+import { modLoaderOptions } from "@/config/enumOptions";
 const tableColumns = [
   {
     field: "displayName",
@@ -71,17 +113,13 @@ const tableColumns = [
     width: 100,
     field: "gameVersion",
     title: "游戏版本",
-    formatter: ({ row }) => {
-      return row.gameVersions[0];
-    },
+    slots: { default: "version" },
   },
   {
     width: 80,
     field: "modLoader",
     title: "加载器",
-    formatter: ({ row }) => {
-      return row.gameVersions[1];
-    },
+    slots: { default: "modLoader" },
   },
   {
     width: 100,
@@ -115,6 +153,16 @@ export default {
     };
   },
   computed: {
+    ...mapState(useAppBaseStore, ["options"]),
+    mcVersions() {
+      return this.options.versionOptions.map((i) => i.value);
+    },
+    modLoaderTypes() {
+      return modLoaderOptions.map((i) => i.title);
+    },
+    modalTitle() {
+      return `${this.record.name} 版本列表`;
+    },
     currentPage() {
       const page = this.queryList.index / this.queryList.pageSize;
       return page + 1;
@@ -137,11 +185,25 @@ export default {
           this.pageTotal = res.pagination.totalCount;
           const records = res.data;
           this.tableData = records.map((i) => {
-            const { fileDate, fileLength, ...args } = i;
+            const { fileDate, gameVersions, fileLength, ...args } = i;
+            const versions = gameVersions || [];
+            const versionData = versions.reduce(
+              (acc, value) => {
+                if (this.mcVersions.includes(value)) {
+                  acc.versions.push(value);
+                } else if (this.modLoaderTypes.includes(value)) {
+                  acc.loadTypes.push(value);
+                }
+                return acc;
+              },
+              { versions: [], loadTypes: [] }
+            );
             return {
+              ...args,
+              mcVersions: versionData.versions,
+              mcLoadTypes: versionData.loadTypes,
               fileDate: compareTime(fileDate),
               fileLength: bytesToMB(fileLength),
-              ...args,
             };
           });
         })
