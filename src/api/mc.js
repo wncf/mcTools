@@ -1,4 +1,5 @@
 import { request } from "@/utils/request";
+import axios from "axios";
 const gameId = 432;
 export const modList = (params) => {
   return request.get(`/mods/search?gameId=${gameId}`, params);
@@ -16,4 +17,12 @@ export const getMcModFiles = ({ modeId, ...args }) => {
 // 获取游戏版本
 export const getMcVersion = (params) => {
   return request.get(`/minecraft/version`, params);
+};
+
+export const pingJavaMc = (params) => {
+  return axios
+    .get(`https://getmc.9876123.xyz/api/ping`, {
+      params: params,
+    })
+    .then((res) => res.data);
 };

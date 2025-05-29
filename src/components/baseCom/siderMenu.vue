@@ -7,11 +7,11 @@
   >
     <a-menu-item key="home">
       <DownloadOutlined />
-      <span>下载</span>
+      <span>下载模组</span>
     </a-menu-item>
     <a-menu-item key="ping">
       <LineChartOutlined />
-      <span>测试ip</span>
+      <span>测试服务器地址</span>
     </a-menu-item>
   </a-menu>
 </template>

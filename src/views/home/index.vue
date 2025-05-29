@@ -1,9 +1,9 @@
 <template>
-  <div class="h-full relative">
-    <div class="absolute top-0 left-0 right-0">
+  <div class="h-full relative bg-white">
+    <div class="absolute top-2 left-4 right-0">
       <SearchFilter v-model:query-list="queryList" @on-search="onSearch" />
     </div>
-    <div class="absolute top-16 bottom-16 left-0 right-0">
+    <div class="absolute top-16 bottom-16 left-4 right-0">
       <vxe-grid
         size="mini"
         height="100%"
