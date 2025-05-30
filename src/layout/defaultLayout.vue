@@ -1,14 +1,11 @@
 <template>
   <a-layout style="min-height: 100vh">
-    <a-layout-sider v-model:collapsed="collapsed" collapsible>
-      <div class="logo"></div>
-      <SilderMenu />
-    </a-layout-sider>
-    <a-layout>
-      <a-layout-content style="margin: 16px">
+    <a-layout-header :style="headerStyle"> <SilderMenu /> </a-layout-header>
+    <a-layout-content class="relative">
+      <div class="absolute inset-4">
         <router-view></router-view>
-      </a-layout-content>
-    </a-layout>
+      </div>
+    </a-layout-content>
   </a-layout>
 </template>
 <script>
@@ -24,7 +21,16 @@ export default {
       collapsed: false,
     };
   },
-  computed: {},
+  computed: {
+    headerStyle() {
+      return {
+        textAlign: "center",
+        color: "#fff",
+        height: 64,
+        lineHeight: "64px",
+      };
+    },
+  },
   watch: {},
   created() {},
   mounted() {},

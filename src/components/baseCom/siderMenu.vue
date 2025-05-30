@@ -1,8 +1,8 @@
 <template>
   <a-menu
     v-model:selectedKeys="selectedKeys"
+    mode="horizontal"
     theme="dark"
-    mode="inline"
     @select="onSelect"
   >
     <a-menu-item key="home">
