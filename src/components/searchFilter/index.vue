@@ -1,6 +1,6 @@
 <template>
-  <div class="py-2 bg-white flex gap-6">
-    <div class="flex gap-2">
+  <div class="py-2 bg-white flex flex-wrap gap-6">
+    <div class="flex gap-2 flex-wrap">
       <a-input-search
         v-if="!hideFilterItems.includes('searchFilter')"
         :value="queryList.searchFilter"

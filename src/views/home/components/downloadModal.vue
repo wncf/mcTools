@@ -1,22 +1,21 @@
 <template>
   <a-modal
-    :width="800"
     :maskClosable="false"
     v-model:open="open"
     :title="modalTitle"
+    width="100%"
+    wrap-class-name="full-modal"
     :footer="null"
     @ok="handleOk"
     @cancel="onCancel"
   >
-    <div class="h-full relative mc_table_body">
-      <div class="absolute top-0 left-0 right-0">
-        <SearchFilter
-          :hideFilterItems="['searchFilter', 'categoryId']"
-          v-model:query-list="queryList"
-          @on-search="onSearch"
-        />
-      </div>
-      <div class="absolute top-12 bottom-16 left-0 right-0">
+    <div class="h-full relative flex flex-col">
+      <SearchFilter
+        :hideFilterItems="['searchFilter', 'categoryId']"
+        v-model:query-list="queryList"
+        @on-search="onSearch"
+      />
+      <div class="flex-1">
         <vxe-grid
           size="mini"
           border
@@ -71,9 +70,7 @@
           </template>
         </vxe-grid>
       </div>
-      <div
-        class="py-2 pr-2 absolute bottom-0 left-0 right-0 bg-white flex justify-end"
-      >
+      <div class="py-2 pr-2 bg-white flex justify-end">
         <a-pagination
           :pageSizeOptions="['10', '20', '40', '50']"
           :current="currentPage"
@@ -98,6 +95,7 @@ const tableColumns = [
   {
     field: "displayName",
     title: "版本名称",
+    minWidth: 160,
   },
   {
     width: 160,
@@ -122,9 +120,10 @@ const tableColumns = [
     slots: { default: "modLoader" },
   },
   {
-    width: 100,
+    width: 80,
     align: "center",
     field: "opt",
+    fixed: "right",
     title: "操作",
     slots: {
       default: "opt",
@@ -231,8 +230,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-.mc_table_body {
-  height: 500px;
-}
-</style>
+<style scoped></style>

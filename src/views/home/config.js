@@ -48,8 +48,9 @@ export const columns = [
   {
     title: "操作",
     field: "opt",
+    align: "center",
     fixed: "right",
-    width: "120px",
+    width: "100px",
     slots: { default: "opt" },
   },
 ];

@@ -1,12 +1,12 @@
 <template>
-  <div class="h-full bg-white px-4 py-4 relative">
+  <div class="h-full bg-white px-2 py-2 relative">
     <div class="h-10 flex gap-2">
       <a-button type="dashed" @click="addPingItems"
         >新增更多 <template #icon><PlusOutlined /></template
       ></a-button>
       <a-button type="default" @click="onPingServer">重新测试所有地址</a-button>
     </div>
-    <div class="absolute top-10 bottom-0 left-4 right-4 overflow-y-auto">
+    <div class="absolute top-10 bottom-0 left-2 right-2 overflow-y-auto">
       <a-form ref="formRef" :model="formData">
         <div class="flex flex-wrap pt-4 gap-4">
           <div

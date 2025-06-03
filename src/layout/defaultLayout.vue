@@ -2,7 +2,7 @@
   <a-layout style="min-height: 100vh">
     <a-layout-header :style="headerStyle"> <SilderMenu /> </a-layout-header>
     <a-layout-content class="relative">
-      <div class="absolute inset-4">
+      <div class="absolute inset-0">
         <router-view></router-view>
       </div>
     </a-layout-content>

@@ -1,9 +1,9 @@
 <template>
-  <div class="h-full relative bg-white">
-    <div class="absolute top-2 left-4 right-0">
+  <div class="h-full relative bg-white flex flex-col px-2">
+    <div class="">
       <SearchFilter v-model:query-list="queryList" @on-search="onSearch" />
     </div>
-    <div class="absolute top-16 bottom-16 left-4 right-0">
+    <div class="flex-1">
       <vxe-grid
         size="mini"
         height="100%"
@@ -54,9 +54,7 @@
         </template>
       </vxe-grid>
     </div>
-    <div
-      class="py-2 pr-2 absolute bottom-0 left-0 right-0 bg-white flex justify-end"
-    >
+    <div class="py-2 pr-2 bg-white flex justify-end">
       <a-pagination
         :pageSizeOptions="['10', '20', '40', '50']"
         :current="currentPage"
