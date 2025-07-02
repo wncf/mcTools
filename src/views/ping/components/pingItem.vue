@@ -68,5 +68,6 @@ export default {
 </script>
 <style scoped>
 .ping_item_span {
+  word-wrap: break-word;
 }
 </style>
