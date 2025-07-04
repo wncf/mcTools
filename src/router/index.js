@@ -17,7 +17,7 @@ const router = createRouter({
           component: () => import("@/views/home/index.vue"),
         },
         {
-          path: "/ping",
+          path: "/ping/:id?",
           name: "ping",
           meta: {
             title: "服务器状态",

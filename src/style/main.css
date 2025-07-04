@@ -22,3 +22,6 @@ svg {
 .full-modal .ant-modal-body {
   flex: 1;
 }
+.ant-spin-nested-loading {
+  height: 100%;
+}

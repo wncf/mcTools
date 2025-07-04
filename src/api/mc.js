@@ -26,3 +26,11 @@ export const pingJavaMc = (params) => {
     })
     .then((res) => res.data);
 };
+
+export const getMcList = (params) => {
+  return axios
+    .get(`https://getmc.9876123.xyz/api/servers`, {
+      params: params,
+    })
+    .then((res) => res.data);
+};

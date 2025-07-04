@@ -6,84 +6,34 @@
       ></a-button>
       <a-button type="default" @click="onPingServer">重新测试所有地址</a-button>
     </div>
-    <div class="absolute top-10 bottom-0 left-2 right-2 overflow-y-auto">
-      <a-form ref="formRef" :model="formData">
-        <div class="flex flex-wrap pt-4 gap-4">
-          <div
-            class="w-80 border-1 p-4 border-gray-100 flex flex-col relative shadow-md"
-            v-for="(item, index) of formData.pingItems"
-            :key="item.key"
+    <div class="absolute top-10 bottom-0 left-2 right-2 overflow-y-auto pb-2">
+      <div class="flex flex-wrap pt-4 gap-4">
+        <div
+          class="w-65 h-60 border-1 rounded-md border-gray-100 flex flex-col relative shadow-md"
+          v-for="(item, index) of pingItems"
+          :key="item.key"
+        >
+          <PingItem
+            :item="item"
+            v-model:address="item.address"
+            @onRemoveItem="onDeletePingItems(index)"
+            @ping="onPingServer(index)"
+            @changeStoreList="asyncStoreList"
           >
-            <a-form-item
-              style="margin-bottom: 0"
-              :name="['pingItems', index, 'address']"
-              :rules="[
-                {
-                  required: true,
-                  trigger: ['change', 'blur'],
-                  validator: (rule, value, callback) => {
-                    if (value) {
-                      if (validateAddress(value)) {
-                        callback(new Error('地址格式错误'));
-                      } else {
-                        callback();
-                      }
-                    } else {
-                      callback();
-                    }
-                  },
-                },
-              ]"
-            >
-              <div
-                class="inline-block h-2 w-2 mr-2 bg-black align-text-bottom rounded-full"
-                :class="{
-                  'bg-gray-300': item.pingStatus === 'pending',
-                  'bg-red-500': item.pingStatus === 'error',
-                  'bg-green-500': item.pingStatus === 'success',
-                }"
-              ></div>
-              <a-input-search
-                style="width: calc(100% - 16px)"
-                placeholder="输入服务器地址"
-                v-model:value="item.address"
-                @search="onPingServer(index)"
-                @change="onInputChange"
-              >
-                <template #enterButton>
-                  <a-button type="primary" @click="onPingServer(index)"
-                    >测试服务器</a-button
-                  >
-                </template>
-              </a-input-search>
-            </a-form-item>
-            <PingItem :item="item"></PingItem>
-            <span class="absolute -top-2 -right-2">
-              <a-button
-                size="small"
-                shape="circle"
-                type="primary"
-                :icon="h(CloseOutlined)"
-                @click="onDeletePingItems(index)"
-              />
-            </span>
-          </div>
-          <!-- <div
-            class="w-40 border-1 border-gray-100 flex flex-col p-4 gap-2"
-          ></div> -->
+          </PingItem>
         </div>
-      </a-form>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { uniqueId } from "xe-utils";
 import { h } from "vue";
 import { CloseOutlined } from "@ant-design/icons-vue";
 import { getStore, asyncStore } from "./store";
 import PingItem from "./components/pingItem.vue";
-import { pingJavaMc } from "@/api/mc";
-import { validateAddress } from "@/utils";
+import { pingJavaMc, getMcList } from "@/api/mc";
+import { serverListFormatter, validateAddress } from "@/utils";
+import { uniqueId } from "xe-utils";
 
 export default {
   name: "pingIndex",
@@ -93,9 +43,7 @@ export default {
   components: { PingItem },
   data() {
     return {
-      formData: {
-        pingItems: [],
-      },
+      pingItems: [],
     };
   },
   computed: {},
@@ -105,24 +53,22 @@ export default {
     this.initPingIitems();
   },
   methods: {
-    onInputChange(event) {
-      this.asyncStoreList();
-    },
-    initPingIitems() {
+    async initPingIitems() {
       const baseList = getStore();
-      if (Array.isArray(baseList) && baseList.length) {
-        this.formData.pingItems = baseList.map((item) => ({
-          key: uniqueId(),
-          address: item,
-          pingStatus: "pending",
-          pingLoading: false,
-        }));
+      const key = this.$route.params.id || "";
+      const { data: serverList } = await getMcList({
+        key: key,
+      });
+      if ((Array.isArray(baseList) && baseList.length) || serverList.length) {
+        const servers = serverListFormatter([...serverList, ...baseList]);
+        console.log(servers, "servers");
+        this.pingItems = servers;
       } else {
         this.addPingItems();
       }
     },
     addPingItems() {
-      this.formData.pingItems.push({
+      this.pingItems.push({
         key: uniqueId(),
         address: "",
         pingStatus: "pending",
@@ -130,32 +76,23 @@ export default {
       });
     },
     asyncStoreList() {
-      const { pingItems } = this.formData;
-      const baseList = pingItems
-        .filter((i) => i.address)
+      const baseList = this.pingItems
+        .filter((i) => i.address && !i.remote)
         .map((item) => item.address);
       asyncStore(baseList);
     },
     onPingServer(index) {
       if (typeof index === "number") {
-        // ping one
-        this.$refs.formRef
-          .validate([["pingItems", index, "address"]])
-          .then((res) => {
-            const item = this.formData.pingItems[index];
-            if (item.address) {
-              item.pingLoading = true;
-              this.fetchPingServer(item);
-            }
-          });
+        const item = this.pingItems[index];
+        if (item.address) {
+          item.pingLoading = true;
+          this.fetchPingServer(item);
+        }
       } else {
-        // ping all
-        this.formData.pingItems.forEach((item, itemIndex) => {
+        this.pingItems.forEach((item) => {
           if (!validateAddress(item.address)) {
             item.pingLoading = true;
             this.fetchPingServer(item);
-          } else {
-            this.$refs.formRef.validate([["pingItems", itemIndex, "address"]]);
           }
         });
       }
@@ -185,7 +122,7 @@ export default {
         });
     },
     onDeletePingItems(index) {
-      this.formData.pingItems.splice(index, 1);
+      this.pingItems.splice(index, 1);
       this.asyncStoreList();
     },
   },
